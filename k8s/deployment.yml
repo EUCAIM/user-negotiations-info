@@ -1,0 +1,43 @@
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: user-negotiations-info
+  namespace: user-negotiations-info
+spec:
+  selector:
+    matchLabels:
+      app: user-negotiations-info
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: user-negotiations-info
+    spec:
+      replicas: 1
+      containers:
+      - image: user-negotiations-info:1.0.0-ALPHA
+        imagePullPolicy: Always
+        name: user-negotiations-info-container
+        env:
+        - name: SETTINGS_FILE
+          value: /opt/user-negotiations-info/config.json
+        resources:
+          requests:
+            memory: "2Gi"
+            cpu: "1"
+          limits:
+            memory: "2Gi"
+            cpu: "1"
+        ports:
+        - containerPort: 8080
+          name: api
+        volumeMounts:
+        - name: webservice-configmap
+          mountPath: /opt/user-negotiations-info/config.json
+          subPath: config.json
+      volumes:
+      - name: webservice-configmap
+        configMap:
+          name: webservice-config
