@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: webservice-config
+  namespace: user-negotiations-info
+data:
+  config.json: paste_here_the_adapted_config_json_for_the_web_service_found_in_src

@@ -1,0 +1,14 @@
+  
+apiVersion: v1
+kind: Service
+metadata:
+  name: user-negotiations-info
+  namespace: user-negotiations-info
+spec:
+  ports:
+  - port: 8080
+    target: 8080
+    protocol: TCP
+    name: api
+  selector:
+    app: user-negotiations-info
