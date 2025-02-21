@@ -15,6 +15,7 @@ class Resource:
     id: str
     name: str
     sourceId: str
+    negotiationId: str
 
 @dataclass
 class ErrorResponse():
