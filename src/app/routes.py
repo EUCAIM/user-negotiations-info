@@ -55,18 +55,21 @@ def getNegotiations():
         content, code = get_negotiations(authH, ui["id"], negotiation_types, 0, 1)
         if code > 299 and code < 200:
             return content, code
-        totalElements = content["page"]["totalElements"]
-        content, code = get_negotiations(authH, ui["id"], negotiation_types, 0, totalElements)
-        if code > 299 and code < 200:
-            return content, code
-        negotiations: list = content["_embedded"]["negotiations"]
+        
         all_datasets = []
-        for n in negotiations: 
-            try:
-                datasets: list[Resource] = get_datasets(authH, n["id"], type)
-                all_datasets.extend(datasets)
-            except DatasetsListException as dle:
-                return json.dumps(asdict(ErrorResponse("Error", dle.status, dle.message))), dle.status
+        totalElements = content["page"]["totalElements"]
+        if totalElements >= 1:
+          content, code = get_negotiations(authH, ui["id"], negotiation_types, 0, totalElements)
+          if code > 299 and code < 200:
+              return content, code
+          negotiations: list = content["_embedded"]["negotiations"]
+          for n in negotiations: 
+              try:
+                  datasets: list[Resource] = get_datasets(authH, n["id"], type)
+                  all_datasets.extend(datasets)
+              except DatasetsListException as dle:
+                  print(traceback.format_exc())
+                  return json.dumps(asdict(ErrorResponse("Error", dle.status, dle.message))), dle.status
         page: dict= {
             "number": 0,
             "totalItems": len(all_datasets),
