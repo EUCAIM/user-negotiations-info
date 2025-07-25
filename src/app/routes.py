@@ -1,4 +1,4 @@
-from flask import request, current_app
+from flask import request, current_app, jsonify
 from werkzeug.utils import secure_filename
 import requests
 from requests  import Response
@@ -28,7 +28,14 @@ def after_request(response):
     # Other headers can be added here if needed
     return response
 
-@mainbp.route('/datasets')
+@mainbp.route('/', methods=['GET'])
+def get_app_info():
+    return jsonify({
+        "name": "user-negotiations-info",
+        "version": current_app.config["VERSION"]
+    })
+
+@mainbp.route('/datasets', methods=['GET'])
 def getNegotiations():
     try:
         type = request.args.get('type')

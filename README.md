@@ -13,7 +13,11 @@ Once you cloned your repository and entered the root dir, follow the next steps:
 
 3. Install the requirements
 
-```pip install -r requirements.txt```
+```
+    pip install toml-to-requirements
+    toml-to-req --toml-file src/pyproject.toml --output requirements.txt
+    pip install -r requirements.txt
+```
 
 
 
@@ -37,12 +41,12 @@ flask run -h <your host> -p <your port>
 
 The web service expects a json file with all the configuration parameters.
 The __config_example.json__ file (found in the __src/__ dir) contains all the fields  that can be configured for the application.
-There are two ways to pass your custom configuration: either create a file named __config.json__ in the application's root dir (__src/__ in our case),or set the env variable __USER_NEGOTIATIONS_INFO_CONFIG__ with the path of your custom configuration.
+There are two ways to pass your custom configuration: either create a file named __config.json__ in the application's root dir (__src/__ in our case), or set the env variable __USER_NEGOTIATIONS_INFO_CONFIG__ with the path of your custom configuration.
 
 # Calls
 
 ```
   export T="<your token>"
-  curl -v -H "Authorization: Bearer $T" <server>:<port>/user-negotiations-info/api/v1/negotiations?type=IN_PROGRESS
+  curl -v -H "Authorization: Bearer $T" <server>:<port>/api/v1/datasets?type=IN_PROGRESS
 
 ```

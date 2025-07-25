@@ -1,5 +1,6 @@
 import os
-import json        
+import json    
+import tomllib    
 
 basedir = os.path.abspath(os.path.dirname(__file__))
 config_env_path = os.environ.get("USER_NEGOTIATIONS_INFO_CONFIG")
@@ -22,7 +23,15 @@ def load_custom_config():
                         "root directory following the template found in 'config_example.json',"\
                         "or define an environment variable USER_NEGOTIATIONS_INFO_CONFIG with the path of the config file")
 
+def get_app_ver():
+    with open("pyproject.toml", "rb") as f:
+        toml_data = tomllib.load(f)
+
+    version = toml_data["project"]["version"]
+    print(f"Flask app version: {version}")
+    return version
 
 class Config:
     # ...
     CUSTOM = load_custom_config()
+    VERSION = get_app_ver()
