@@ -8,7 +8,7 @@ import json
 from dataclasses import  asdict
 
 from app.services_extra import oidc_user_info, get_negotiations, get_datasets
-from app.models import ErrorResponse, Negotiation, Resource
+from app.models import ErrorResponse, Resource
 from flask import Blueprint
 from app.exceptions import DatasetsListException
 
@@ -36,7 +36,7 @@ def get_app_info():
     })
 
 @mainbp.route('/datasets', methods=['GET'])
-def getNegotiations():
+def getDatasets():
     try:
         type = request.args.get('type')
         if type not in DATASET_STATUS_TYPE:
