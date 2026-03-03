@@ -11,3 +11,10 @@ class BaseException(Exception):
         self.title = title
         self.status = status
         self.detail = detail
+
+class DatasetsListException(BaseException): 
+
+    def __init__(self, message, status):
+        super().__init__(message)
+        self.message = message
+        self.status = status

@@ -1,0 +1,114 @@
+openapi: 3.1.0
+info:
+  title: User Negotiations Info
+  version: 1.1.x
+  description: An API that returns the available and in progress datasets in all negotiations for a user
+servers:
+  - url: /api/v1
+paths:
+  /:
+    get:
+      summary: Server information
+      operationId: get_app_info
+      responses:
+        "200":
+          description: The app information
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AppInfo"
+  /datasets:
+    get:
+      summary: Get all datasets that are either available or in progress
+      operationId: getDatasets
+      tags:
+        - datasets
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: type
+          in: query
+          description: Type of datasets to return
+          required: true
+          schema:
+            type: string
+            oneOf: 
+              - title: IN_PROGRESS
+                const: IN_PROGRESS
+              - title: AVAILABLE
+                const: AVAILABLE
+
+      responses:
+        "200":
+          description: A page with the list of datasets
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Page"
+        "401":
+          description: Unauthorized
+
+components:
+  securitySchemes: 
+    bearerAuth: 
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+  schemas:
+    AppInfo:
+      type: object
+      required:
+        - name
+        - version
+      properties:
+        name:
+          type: string
+        version:
+          type: string
+
+    Page:
+      type: object
+      required:
+        - number
+        - totalItems
+        - totalPages
+        - size
+        - data
+      properties:
+        number:
+          type: integer
+          format: int64
+        totalItems:
+          type: integer
+          format: int64
+        totalPages:
+          type: integer
+          format: int64
+        size:
+          type: integer
+          format: int64
+        data:
+          type: array
+          items:
+            $ref: "#/components/schemas/Resource"
+    Resource:
+      type: object
+      required:
+        - id
+        - name
+        - sourceId
+        - negotiationId
+      properties:
+        id:
+          type: string
+          description: the ID of the dataset, internal to the Negotiator 
+        name:
+          type: string
+          description: the name of the dataset
+        sourceId:
+          type: string
+          description: the ID of the dataset in the source respository
+        negotiationId:
+          type: string
+          description: the ID of the negotiation that includes this dataset
+        
